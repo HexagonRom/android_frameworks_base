@@ -5586,17 +5586,17 @@ public class AudioService extends IAudioService.Stub {
         }
     }
 
-    private void startMusicPlayer() {
+    private void startMusicPlayer()
+    {
+        boolean launchPlayer = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HEADSET_CONNECT_PLAYER, 0, UserHandle.USER_CURRENT) != 0;
         TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
-        if (!tm.isInCall()) {
-            try {
-                Intent playerIntent = new Intent(Intent.ACTION_MAIN);
-                playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);
-                playerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(playerIntent);
-            } catch (ActivityNotFoundException | IllegalArgumentException e) {
-                Log.w(TAG, "No music player Activity could be found");
-            }
+
+        if (launchPlayer && !tm.isInCall()) {
+            Intent playerIntent = new Intent(Intent.ACTION_MAIN);
+            playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);
+            playerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(playerIntent);
         }
     }
 

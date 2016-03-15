@@ -6125,6 +6125,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.LOCK_QS_DISABLED),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_ROTATION),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -6171,6 +6174,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.Secure.getUriFor(
                     Settings.Secure.LOCK_QS_DISABLED))) {
                 setStatusBarWindowViewOptions();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_ROTATION))) {
+                updateLockScreenRotation();
             }
         }
 
@@ -6186,6 +6192,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             updateQsPanelResources();
             setLockscreenMaxNotifications();
             updateTickerSettings();
+            updateLockScreenRotation();
 
             // Update slim recents
             updateRecents();
@@ -6230,6 +6237,12 @@ public class StatusBar extends SystemUI implements DemoMode,
     private void updateQsPanelResources() {
         if (mQSPanel != null) {
             mQSPanel.updateResources();
+        }
+    }
+
+    private void updateLockScreenRotation() {
+        if (mStatusBarWindowManager != null) {
+            mStatusBarWindowManager.updateKeyguardScreenRotation();
         }
     }
 

@@ -39,4 +39,7 @@
     <string name="lucky_patcher_installed_message">I hereby willingly admit that I\'m a carnt, thief and a pirate. I love to steal money from the hard working developers and to brag about it.</string>
     <string name="lucky_patcher_admit">I admit</string>
 
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+
 </resources>

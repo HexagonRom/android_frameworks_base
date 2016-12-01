@@ -87,8 +87,12 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
 
     private TextView mAlarmStatus;
     private View mAlarmStatusCollapsed;
+    private TextView mAlarmStatusCenter;
+    private View mAlarmStatusCollapsedCenter;
     private View mClock;
+    private View mClockCenter;
     private View mDate;
+    private View mDateCenter;
 
     private QSPanel mQsPanel;
 
@@ -96,7 +100,9 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private boolean mAlarmShowing;
 
     private ViewGroup mDateTimeGroup;
+    private ViewGroup mDateTimeCenterGroup;
     private ViewGroup mDateTimeAlarmGroup;
+    private ViewGroup mDateTimeAlarmCenterGroup;
     private TextView mEmergencyOnly;
 
     protected ExpandableIndicator mExpandIndicator;
@@ -135,6 +141,14 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private SparseBooleanArray mRoamingsBySubId = new SparseBooleanArray();
     private boolean mIsRoaming;
 
+    //Weather info
+    private LinearLayout mWeatherContainer;
+    private ImageView mWeatherimage;
+    private ImageView mNoWeatherimage;
+    private TextView mWeatherLine1, mWeatherLine2;
+    private OmniJawsClient mWeatherClient;
+    private OmniJawsClient.WeatherInfo mWeatherData;
+    private boolean mWeatherEnabled;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -152,14 +166,21 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
 
         mDateTimeAlarmGroup = (ViewGroup) findViewById(R.id.date_time_alarm_group);
         mDateTimeAlarmGroup.findViewById(R.id.empty_time_view).setVisibility(View.GONE);
+        mDateTimeAlarmCenterGroup = (ViewGroup) findViewById(R.id.date_time_alarm_center_group);
+        mDateTimeAlarmCenterGroup.setVisibility(View.GONE);
         mDateTimeGroup = (ViewGroup) findViewById(R.id.date_time_group);
         mDateTimeGroup.setPivotX(0);
         mDateTimeGroup.setPivotY(0);
+        mDateTimeCenterGroup = (ViewGroup) findViewById(R.id.date_time_center_group);
         mDateTimeTranslation = getResources().getDimension(R.dimen.qs_date_time_translation);
         mClock = findViewById(R.id.clock);
         mClock.setOnClickListener(this);
+        mClockCenter = findViewById(R.id.clock_center);
+        mClockCenter.setOnClickListener(this);
         mDate = findViewById(R.id.date);
         mDate.setOnClickListener(this);
+        mDateCenter = findViewById(R.id.date_center);
+        mDateCenter.setOnClickListener(this);
 
         mShowFullAlarm = getResources().getBoolean(R.bool.quick_settings_show_full_alarm);
 
@@ -180,6 +201,10 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mAlarmStatusCollapsed = findViewById(R.id.alarm_status_collapsed);
         mAlarmStatus = (TextView) findViewById(R.id.alarm_status);
         mAlarmStatus.setOnClickListener(this);
+
+        mAlarmStatusCollapsedCenter = findViewById(R.id.alarm_status_collapsed_center);
+        mAlarmStatusCenter = (TextView) findViewById(R.id.alarm_status_center);
+        mAlarmStatusCenter.setOnClickListener(this);
 
         mMultiUserSwitch = (MultiUserSwitch) findViewById(R.id.multi_user_switch);
         mMultiUserAvatar = (ImageView) mMultiUserSwitch.findViewById(R.id.multi_user_avatar);
@@ -209,18 +234,27 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
 
     private void updateResources() {
         FontSizeUtils.updateFontSize(mAlarmStatus, R.dimen.qs_date_collapsed_size);
+        FontSizeUtils.updateFontSize(mAlarmStatusCenter, R.dimen.qs_date_collapsed_size);
         FontSizeUtils.updateFontSize(mEmergencyOnly, R.dimen.qs_emergency_calls_only_text_size);
         FontSizeUtils.updateFontSize(this, R.id.date, R.dimen.qs_time_collapsed_size);
         FontSizeUtils.updateFontSize(mDateTimeGroup, R.id.time_view,
                 R.dimen.qs_time_collapsed_size);
+        FontSizeUtils.updateFontSize(mDateTimeCenterGroup, R.id.time_view,
+                R.dimen.qs_time_collapsed_size);
+        FontSizeUtils.updateFontSize(mDateTimeAlarmGroup, R.id.time_view,
+                R.dimen.qs_time_collapsed_size);
         FontSizeUtils.updateFontSize(mDateTimeGroup, R.id.am_pm_view,
+                R.dimen.qs_time_collapsed_size);
+        FontSizeUtils.updateFontSize(mDateTimeCenterGroup, R.id.am_pm_view,
+                R.dimen.qs_time_collapsed_size);
+        FontSizeUtils.updateFontSize(mDateTimeAlarmGroup, R.id.am_pm_view,
                 R.dimen.qs_time_collapsed_size);
 
         Builder builder = new Builder()
-                .addFloat(mShowFullAlarm ? mAlarmStatus : findViewById(R.id.date), "alpha", 0, 1)
+                .addFloat(mShowFullAlarm ? (!isDateTimeGroupCenter() ? mAlarmStatus :  mAlarmStatusCenter) : findViewById(R.id.date), "alpha", 0, 1)
                 .addFloat(mEmergencyOnly, "alpha", 0, 1);
         if (mShowFullAlarm) {
-            builder.addFloat(mAlarmStatusCollapsed, "alpha", 1, 0);
+            builder.addFloat(!isDateTimeGroupCenter() ? mAlarmStatusCollapsed : mAlarmStatusCollapsedCenter, "alpha", 1, 0);
         }
         mAnimator = builder.build();
 
@@ -260,6 +294,17 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         }
     }
 
+    private void updateDateTimeCenter() {
+        if (isDateTimeGroupCenter() && !(hasSettingsIcon && hasEdit && hasMultiUserSwitch && hasExpandIndicator)) {
+            mDateTimeAlarmGroup.setVisibility(View.GONE);
+            mDateTimeAlarmCenterGroup.setVisibility(View.VISIBLE);
+        } else {
+            mDateTimeAlarmCenterGroup.setVisibility(View.GONE);
+            mDateTimeAlarmGroup.setVisibility(View.VISIBLE);
+        }
+        updateResources();
+    }
+
     @Override
     public int getCollapsedHeight() {
         return getHeight();
@@ -283,11 +328,19 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mNextAlarm = nextAlarm;
         if (nextAlarm != null) {
             String alarmString = KeyguardStatusView.formatNextAlarm(getContext(), nextAlarm);
-            mAlarmStatus.setText(alarmString);
-            mAlarmStatus.setContentDescription(mContext.getString(
-                    R.string.accessibility_quick_settings_alarm, alarmString));
-            mAlarmStatusCollapsed.setContentDescription(mContext.getString(
-                    R.string.accessibility_quick_settings_alarm, alarmString));
+            if (isDateTimeGroupCenter()) {
+                mAlarmStatusCenter.setText(alarmString);
+                mAlarmStatusCenter.setContentDescription(mContext.getString(
+                        R.string.accessibility_quick_settings_alarm, alarmString));
+                mAlarmStatusCollapsedCenter.setContentDescription(mContext.getString(
+                        R.string.accessibility_quick_settings_alarm, alarmString));
+            } else {
+                mAlarmStatus.setText(alarmString);
+                mAlarmStatus.setContentDescription(mContext.getString(
+                        R.string.accessibility_quick_settings_alarm, alarmString));
+                mAlarmStatusCollapsed.setContentDescription(mContext.getString(
+                        R.string.accessibility_quick_settings_alarm, alarmString));
+            }
         }
         if (mAlarmShowing != (nextAlarm != null)) {
             mAlarmShowing = nextAlarm != null;
@@ -316,8 +369,13 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     }
 
     private void updateAlarmVisibilities() {
-        mAlarmStatus.setVisibility(mAlarmShowing && mShowFullAlarm ? View.VISIBLE : View.INVISIBLE);
-        mAlarmStatusCollapsed.setVisibility(mAlarmShowing ? View.VISIBLE : View.INVISIBLE);
+        if (isDateTimeGroupCenter()) {
+            mAlarmStatusCenter.setVisibility(mAlarmShowing && mShowFullAlarm ? View.VISIBLE : View.INVISIBLE);
+            mAlarmStatusCollapsedCenter.setVisibility(mAlarmShowing ? View.VISIBLE : View.INVISIBLE);
+        } else {
+            mAlarmStatus.setVisibility(mAlarmShowing && mShowFullAlarm ? View.VISIBLE : View.INVISIBLE);
+            mAlarmStatusCollapsed.setVisibility(mAlarmShowing ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 
     public void setListening(boolean listening) {
@@ -333,13 +391,23 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     public void updateEverything() {
         post(() -> {
             updateVisibilities();
+            if (isDateTimeGroupCenter()) {
+                mClockCenter.setClickable(mExpanded || mShowFullAlarm);
+                mDateCenter.setClickable(mExpanded || mShowFullAlarm);
+                mAlarmStatusCenter.setClickable(mExpanded && mShowFullAlarm);
+            } else {
+                mClock.setClickable(mExpanded || mShowFullAlarm);
+                mDate.setClickable(mExpanded || mShowFullAlarm);
+                mAlarmStatus.setClickable(mExpanded && mShowFullAlarm);
+            }
             setClickable(false);
         });
     }
 
-    protected void updateVisibilities() {
-        updateAlarmVisibilities();
+    @Override
+    public void updateVisibilities() {
         updateDateTimePosition();
+        updateAlarmVisibilities();
 
         mEmergencyOnly.setVisibility(mExpanded && (mShowEmergencyCallsOnly || mIsRoaming)
 
@@ -370,6 +438,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private void updateDateTimePosition() {
         mDateTimeAlarmGroup.setTranslationY(mShowEmergencyCallsOnly || mIsRoaming
                 ? mExpansionAmount * mDateTimeTranslation : 0);
+        updateDateTimeCenter();
     }
 
     private void updateListeners() {
@@ -439,14 +508,14 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
             } else {
                 startSettingsActivity();
             }
-        } else if (v == mAlarmStatus && mNextAlarm != null) {
+        } else if ((v == mAlarmStatus || v == mAlarmStatusCenter) && mNextAlarm != null) {
             PendingIntent showIntent = mNextAlarm.getShowIntent();
             if (showIntent != null && showIntent.isActivity()) {
                 mActivityStarter.startActivity(showIntent.getIntent(), true /* dismissShade */);
             }
-        } else if (v == mClock) {
+        } else if (v == mClock || v == mClockCenter) {
             startAlarmsActivity();
-        } else if (v == mDate) {
+        } else if (v == mDate || v == mDateCenter) {
             startCalendarActivity();
         } else if (v == mRunningServicesButton) {
             MetricsLogger.action(mContext,
@@ -699,5 +768,20 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     public boolean isMultiUserSwitchDisabled() {
         return Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.QS_MULTIUSER_SWITCH_TOGGLE, 0) == 1;
+    }
+
+    public boolean isWeatherShown() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.HEADER_WEATHER_ENABLED, 0) == 1;
+    }
+
+    public boolean isWeatherImageShown() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.HEADER_WEATHER_IMAGE_ENABLED, 0) == 1;
+    }
+
+    public boolean isDateTimeGroupCenter() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.QS_DATE_TIME_CENTER, 0) == 1;
     }
 }

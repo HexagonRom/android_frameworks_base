@@ -285,8 +285,8 @@ public class RecentController implements RecentPanelView.OnExitListener,
         });
 
         // Settings observer
-        SettingsObserver observer = new SettingsObserver(mHandler);
-        observer.observe();
+        new SettingsObserver(mHandler).observe();
+        new KeepOpenSettingsObserver(mHandler).observe();
     }
 
     /**
@@ -830,7 +830,7 @@ public class RecentController implements RecentPanelView.OnExitListener,
 
         @Override
         protected void update() {
-            // Close recent panel if it is opened.
+            // Close recent panel if it is opened
             hideRecents(false);
 
             ContentResolver resolver = mContext.getContentResolver();
@@ -861,6 +861,7 @@ public class RecentController implements RecentPanelView.OnExitListener,
             if (scaleFactor != mScaleFactor) {
                 mScaleFactor = scaleFactor;
                 rebuildRecentsScreen();
+                CacheController.getInstance(mContext).clearCache();
             }
             if (mRecentPanelView != null) {
                 mRecentPanelView.setScaleFactor(mScaleFactor);

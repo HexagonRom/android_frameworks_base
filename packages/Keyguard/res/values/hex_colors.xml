@@ -19,4 +19,5 @@
 <resources>
     <!--  Hexagon lockscreen -->
     <color name="hex_color">#71000000</color>
+    <color name="omni_kg_wrong_passcode">#fff4511e</color>
 </resources>

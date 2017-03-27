@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar;
 
 import android.content.ComponentName;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -469,6 +470,12 @@ public class CommandQueue extends IStatusBar.Stub {
             mHandler.removeMessages(MSG_TOGGLE_SCREENSHOT);
             mHandler.obtainMessage(MSG_TOGGLE_SCREENSHOT, 0, 0, null).sendToTarget();
         }
+    }
+
+    public void showCustomIntentAfterKeyguard(Intent intent) {
+        mHandler.removeMessages(MSG_START_CUSTOM_INTENT_AFTER_KEYGUARD);
+        Message m = mHandler.obtainMessage(MSG_START_CUSTOM_INTENT_AFTER_KEYGUARD, 0, 0, intent);
+        m.sendToTarget();
     }
 
     private final class H extends Handler {

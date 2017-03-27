@@ -20,4 +20,8 @@
     <!--  Hexagon lockscreen -->
     <item type="dimen" name="hex_dy">1.0</item>
     <item type="dimen" name="hex_radius">3.0</item>
+    <!-- The seperater between the shorcuts. -->
+    <dimen name="shortcut_seperater_width">8dp</dimen>
+    <!-- Top margin for shortcuts. -->
+    <dimen name="shortcut_margin_top">25dp</dimen>
 </resources>

@@ -151,15 +151,6 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private OmniJawsClient.WeatherInfo mWeatherData;
     private boolean mWeatherEnabled;
 
-    //Weather info
-    private LinearLayout mWeatherContainer;
-    private ImageView mWeatherimage;
-    private ImageView mNoWeatherimage;
-    private TextView mWeatherLine1, mWeatherLine2;
-    private OmniJawsClient mWeatherClient;
-    private OmniJawsClient.WeatherInfo mWeatherData;
-    private boolean mWeatherEnabled;
-
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

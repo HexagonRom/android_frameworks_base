@@ -5586,13 +5586,9 @@ public class AudioService extends IAudioService.Stub {
         }
     }
 
-    private void startMusicPlayer()
-    {
-        boolean launchPlayer = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.HEADSET_CONNECT_PLAYER, 0, UserHandle.USER_CURRENT) != 0;
+    private void startMusicPlayer() {
         TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
-
-        if (launchPlayer && !tm.isInCall()) {
+        if (!tm.isInCall()) {
             try {
                 Intent playerIntent = new Intent(Intent.ACTION_MAIN);
                 playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);

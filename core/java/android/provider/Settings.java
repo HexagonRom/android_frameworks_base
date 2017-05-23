@@ -5151,6 +5151,141 @@ public final class Settings {
         public static final String SCREEN_STATE_ON_DELAY = "screen_state_on_delay";
 
         /**
+         * Custom icon pack name to use for Slim Recents
+         * @hide
+         */
+        public static final String SLIM_RECENTS_ICON_PACK = "slim_recents_icon_pack";
+
+        /**
+         * Navbar Button Color Switch
+         * @hide
+         */
+        public static final String NAVBAR_TINT_SWITCH = "navbar_tint_switch";
+
+         /**
+         * Navbar Button Color
+         * @hide
+         */
+        public static final String NAVBAR_BUTTON_COLOR = "navbar_button_color";
+
+        /**
+         * Navbar Button Custom icon Color Switch
+         * @hide
+         */
+        public static final String NAVBAR_BUTON_CUSTOM_ICON_SWITCH = "navbar_button_custom_icon_switch";
+
+        /**
+         * Whether to filter out "inappropriate language" from AICP Extras
+         * @hide
+         */
+        public static final String AE_MODERATE_LANGUAGE = "ae_moderate_language";
+
+        /**
+         * Defines the shortcuts to be shown on lockscreen
+         * Usage is like this: target:icon|target:icon|target:icon
+         * if :icon is not set, default application icon will be used
+         * @hide
+         */
+        public static final String LOCKSCREEN_SHORTCUTS = "lockscreen_shortcuts";
+
+        /**
+         * Whether shorcuts open with normal or longpress
+         * @hide
+         */
+        public static final String LOCKSCREEN_SHORTCUTS_LONGPRESS =
+                "lockscreen_shortcuts_longpress";
+
+        /**
+         * Pixel Anim Duration
+         * @hide
+         */
+        public static final String OPA_ANIM_DURATION_Y = "opa_anim_duration_y";
+
+        /**
+         * Pixel Anim Duration
+         * @hide
+         */
+        public static final String OPA_ANIM_DURATION_X = "opa_anim_duration_x";
+
+        /**
+         * Pixel Anim Duration
+         * @hide
+         */
+        public static final String COLLAPSE_ANIMATION_DURATION_RY = "collapse_anim_duration_ry";
+
+        /**
+         * Pixel Anim Duration
+         * @hide
+         */
+        public static final String COLLAPSE_ANIMATION_DURATION_BG = "collapse_anim_duration_bg";
+
+        /**
+         * Pixel Anim Duration
+         * @hide
+         */
+        public static final String RETRACT_ANIMATION_DURATION = "retract_anim_duration";
+
+        /**
+         * Pixel Anim Duration
+         * @hide
+         */
+        public static final String DIAMOND_ANIMATION_DURATION = "diamond_anim_duration";
+
+        /**
+         * Pixel Anim Duration
+         * @hide
+         */
+        public static final String DOTS_RESIZE_DURATION = "dots_anim_duration";
+
+        /**
+         * Pixel Anim Duration
+         * @hide
+         */
+        public static final String HOME_RESIZE_DURATION = "home_resize_anim_duration";
+
+        /**
+         * Whether to show the weather info on the lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_SHOW_WEATHER = "lock_screen_show_weather";
+
+        /**
+         * Whether to show the weather location on lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_SHOW_WEATHER_LOCATION = "lock_screen_show_weather_location";
+
+        /**
+         * Whether to show the weather condition icon on lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_WEATHER_CONDITION_ICON = "lock_screen_weather_condition_icon";
+
+        /**
+         * Whether to show QS footer warnings
+         * @hide
+         */
+        public static final String QS_FOOTER_WARNINGS = "qs_footer_warnings";
+
+        /**
+         * Whether to show the weather wind speed in km/h or m/s
+         * @hide
+         */
+        public static final String OMNIJAWS_WINDSPEED_M_S = "omnijaws_windspeed_m_s";
+
+        /**
+         * Whether to show the weather wind direcion in pinwheel or angular directions
+         * @hide
+         */
+        public static final String OMNIJAWS_WINDDIRECTION_DISPLAY = "omnijaws_winddirection_display";
+
+        /**
+         * Whether or not to allow quick settings expansion with one swipe on the fingerprint sensor.
+         * @hide
+         */
+        public static final String STATUS_BAR_QUICK_QS_PULLDOWN_FP = "status_bar_quick_qs_pulldown_fp";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *

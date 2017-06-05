@@ -794,6 +794,24 @@ public class RecentController implements RecentPanelView.OnExitListener,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.RECENT_CARD_BG_COLOR),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SLIM_RECENTS_ICON_PACK),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCK_TO_APP_ENABLED),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENTS_MAX_APPS),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SLIM_MEM_BAR_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SLIM_MEM_TEXT_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SLIM_RECENTS_CORNER_RADIUS),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -846,6 +864,16 @@ public class RecentController implements RecentPanelView.OnExitListener,
                 mRecentPanelView.setCardColor(Settings.System.getIntForUser(
                     resolver, Settings.System.RECENT_CARD_BG_COLOR, 0x00ffffff,
                     UserHandle.USER_CURRENT));
+                mRecentPanelView.isScreenPinningEnabled(Settings.System.getIntForUser(
+                        resolver, Settings.System.LOCK_TO_APP_ENABLED, 0,
+                        UserHandle.USER_CURRENT) == 1);
+                mRecentPanelView.setMaxAppsToLoad(Settings.System.getIntForUser(
+                        resolver, Settings.System.RECENTS_MAX_APPS, 15,
+                        UserHandle.USER_CURRENT));
+                mRecentPanelView.setCornerRadius(Converter.floatDpToPx(mContext,
+                        Settings.System.getIntForUser(resolver,
+                                Settings.System.SLIM_RECENTS_CORNER_RADIUS, 5,
+                                UserHandle.USER_CURRENT)));
             }
 
             mRecentContent.setElevation(50);

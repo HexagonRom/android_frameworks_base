@@ -302,7 +302,6 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
             mDateTimeAlarmCenterGroup.setVisibility(View.GONE);
             mDateTimeAlarmGroup.setVisibility(View.VISIBLE);
         }
-        updateResources();
     }
 
     @Override

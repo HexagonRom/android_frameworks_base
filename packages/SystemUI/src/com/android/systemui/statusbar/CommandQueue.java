@@ -82,6 +82,8 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_TOGGLE_LAST_APP               = 36 << MSG_SHIFT;
     private static final int MSG_TOGGLE_KILL_APP               = 37 << MSG_SHIFT;
     private static final int MSG_TOGGLE_SCREENSHOT             = 38 << MSG_SHIFT;
+    private static final int MSG_START_CUSTOM_INTENT_AFTER_KEYGUARD = 39 << MSG_SHIFT;
+    private static final int MSG_LEFT_IN_LANDSCAPE_STATE_CHANGED = 40 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -143,10 +145,20 @@ public class CommandQueue extends IStatusBar.Stub {
         public void toggleKillApp();
         public void toggleScreenshot();
         public void toggleOrientationListener(boolean enable);
+        public void showCustomIntentAfterKeyguard(Intent intent);
+        void leftInLandscapeChanged(boolean isLeft);
     }
 
     public CommandQueue(Callbacks callbacks) {
         mCallbacks = callbacks;
+    }
+
+    public void leftInLandscapeChanged(boolean isLeft) {
+        synchronized (mLock) {
+            mHandler.removeMessages(MSG_LEFT_IN_LANDSCAPE_STATE_CHANGED);
+            mHandler.obtainMessage(MSG_LEFT_IN_LANDSCAPE_STATE_CHANGED,
+                    isLeft ? 1 : 0, 0, null).sendToTarget();
+        }
     }
 
     public void screenPinningStateChanged(boolean enabled) {
@@ -582,6 +594,12 @@ public class CommandQueue extends IStatusBar.Stub {
                     break;
                 case MSG_TOGGLE_SCREENSHOT:
                     mCallbacks.toggleScreenshot();
+                    break;
+                case MSG_START_CUSTOM_INTENT_AFTER_KEYGUARD:
+                    mCallbacks.showCustomIntentAfterKeyguard((Intent) msg.obj);
+                    break;
+                case MSG_LEFT_IN_LANDSCAPE_STATE_CHANGED:
+                    mCallbacks.leftInLandscapeChanged(msg.arg1 != 0);
                     break;
             }
         }

@@ -4209,7 +4209,15 @@ public final class Settings {
         public static final String STATUS_BAR_LOGO = "status_bar_logo";
 
         /**
-         * --- AICP System settings end
+
+        /**
+         * Sensor block per-package
+         * @hide
+         */
+        public static final String SENSOR_BLOCK = "sensor_block";
+
+        /**
+         * --- HexagonRom System settings end
          *  Add new system settings above this comment
          */
 

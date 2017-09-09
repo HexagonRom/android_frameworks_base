@@ -4056,6 +4056,12 @@ public final class Settings {
 
         /**
          * --- HexagonRom System settings end
+        * Whether to show the battery info on the lockscreen while charging
+        * @hide
+        */
+        public static final String LOCKSCREEN_BATTERY_INFO = "lockscreen_battery_info";
+
+        /**
          *  Add new system settings above this comment
          */
 

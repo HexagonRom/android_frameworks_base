@@ -68,6 +68,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     // Hex additions start
     private View mHexLogo;
     private boolean mShowLogo;
+    private View mHexLogoRight;
+    private int mShowLogo;
     private final Handler mHandler = new Handler();
 
     private class HexSettingsObserver extends ContentObserver {
@@ -123,6 +125,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mSignalClusterView = mStatusBar.findViewById(R.id.signal_cluster);
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mSignalClusterView);
         mHexLogo = mStatusBar.findViewById(R.id.status_bar_logo);
+        mHexLogoRight = mStatusBar.findViewById(R.id.status_bar_logo_right);
+
         updateSettings(false);
         // Default to showing until we know otherwise.
         showSystemIconArea(false);
@@ -223,22 +227,28 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     public void hideSystemIconArea(boolean animate) {
         animateHide(mSystemIconArea, animate, true);
+        if (mShowLogo == 2) {
+            animateHide(mHexLogoRight, animate, false);
+        }
     }
 
     public void showSystemIconArea(boolean animate) {
         animateShow(mSystemIconArea, animate);
+        if (mShowLogo == 2) {
+            animateShow(mHexLogoRight, animate);
+        }
     }
 
     public void hideNotificationIconArea(boolean animate) {
         animateHide(mNotificationIconAreaInner, animate, true);
-        if (mShowLogo) {
-            animateHide(mHexLogo, animate, true);
+        if (mShowLogo == 1) {
+            animateHide(mHexLogo, animate, false);
         }
     }
 
     public void showNotificationIconArea(boolean animate) {
         animateShow(mNotificationIconAreaInner, animate);
-        if (mShowLogo) {
+        if (mShowLogo == 1) {
             animateShow(mHexLogo, animate);
         }
     }
@@ -308,14 +318,23 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     public void updateSettings(boolean animate) {
         mShowLogo = Settings.System.getIntForUser(
                 getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO, 0,
-                UserHandle.USER_CURRENT) == 1;
+                UserHandle.USER_CURRENT);
         if (mNotificationIconAreaInner != null) {
-            if (mShowLogo) {
+            if (mShowLogo == 1) {
                 if (mNotificationIconAreaInner.getVisibility() == View.VISIBLE) {
                     animateShow(mHexLogo, animate);
                 }
-            } else {
+            } else if (mShowLogo != 1) {
                 animateHide(mHexLogo, animate, false);
+            }
+        }
+        if (mSystemIconArea != null) {
+            if (mShowLogo == 2) {
+                if (mSystemIconArea.getVisibility() == View.VISIBLE) {
+                    animateShow(mHexLogoRight, animate);
+                }
+            } else if (mShowLogo != 2) {
+                animateHide(mHexLogoRight, animate, false);
             }
         }
     }

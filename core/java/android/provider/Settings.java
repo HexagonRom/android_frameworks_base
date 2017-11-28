@@ -4283,12 +4283,6 @@ public final class Settings {
         /**
 
         /**
-        * Play charging sounds for wifi only devices
-         * @hide
-         */
-        public static final String PLAY_CHARGING_SOUNDS = "play_charging_sounds";
-
-        /**
          * Status bar carrier label
          * 0: Hide
          * 1: Display on keyguard status bar

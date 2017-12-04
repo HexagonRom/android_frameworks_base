@@ -5115,10 +5115,6 @@ public final class Settings {
         public static final String BATTERY_CHARGING_COLOR = "battery_charging_color";
 
         /**
-         * Whether to filter out "inappropriate language" from AICP Extras
-         * @hide
-         */
-        public static final String AE_MODERATE_LANGUAGE = "ae_moderate_language";
 
         /**
          * @hide

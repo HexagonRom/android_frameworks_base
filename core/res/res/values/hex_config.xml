@@ -42,9 +42,8 @@
         <item>com.Slack</item>
     </string-array>
 
-    <!-- True if the notification's dynamic app icon/title tint should be optimised for dark
-    backgrounds (requires config_allowNotificationIconTextTinting to be true)-->
-    <bool name="config_useDarkBgNotificationIconTextTinting">false</bool>
+    <!-- The duration (in milliseconds) of slim recent app screen animation. -->
+    <integer name="config_recentDefaultDur">150</integer>
 
     <!-- Whether notify fingerprint client of successful cancelled authentication -->
     <bool name="config_notifyClientOnFingerprintCancelSuccess">false</bool>

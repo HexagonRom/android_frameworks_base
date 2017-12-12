@@ -4572,7 +4572,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(QS_TILE_TITLE_VISIBILITY);
             PRIVATE_SETTINGS.add(STATUS_BAR_LOGO);
             PRIVATE_SETTINGS.add(QS_STYLE_DARK);
-            PRIVATE_SETTINGS.add(LOCKSCREEN_ROTATION);
         }
 
         /**

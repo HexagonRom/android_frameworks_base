@@ -154,7 +154,7 @@ public class CompassTile extends QSTileImpl<BooleanState> implements SensorEvent
     }
 
     @Override
-    public void setListening(boolean listening) {
+    public void handleSetListening(boolean listening) {
         if (!listening) {
             setListeningSensors(false);
             mActive = false;

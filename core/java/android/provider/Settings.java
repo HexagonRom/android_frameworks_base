@@ -4387,6 +4387,14 @@ public final class Settings {
         public static final String TRANSPARENT_POWER_DIALOG_DIM = "transparent_power_dialog_dim";
 
         /**
+        * 0 - wallpaper based
+        * 1 - force light
+        * 2 - force dark
+        * @hide
+        */
+       public static final String SYSTEM_UI_THEME = "system_ui_theme";
+
+        /**
          *  Add new system settings above this comment
          */
 

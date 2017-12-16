@@ -4062,10 +4062,6 @@ public final class Settings {
         public static final String LOCKSCREEN_BATTERY_INFO = "lockscreen_battery_info";
 
         /**
-         *  Add new system settings above this comment
-         */
-
-        /**
          * Enable\Disable Bluetooth Battery bar
          * @hide
          */
@@ -4278,9 +4274,6 @@ public final class Settings {
         /**
          * @hide
          */
-        public static final String QS_STYLE_DARK = "qs_style_dark";
-
-        /**
 
         /**
          * Status bar carrier label
@@ -4571,7 +4564,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD);
             PRIVATE_SETTINGS.add(QS_TILE_TITLE_VISIBILITY);
             PRIVATE_SETTINGS.add(STATUS_BAR_LOGO);
-            PRIVATE_SETTINGS.add(QS_STYLE_DARK);
         }
 
         /**

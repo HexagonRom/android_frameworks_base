@@ -96,7 +96,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             updateSettings(true);
         }
     }
-    private HexSettingsObserver mHexSettingsObserver = new HexSettingsObserver(mHandler);
+    private HexSettingsObserver mHexSettingsObserver;
 
     private SignalCallback mSignalCallback = new SignalCallback() {
         @Override
@@ -111,7 +111,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mKeyguardMonitor = Dependency.get(KeyguardMonitor.class);
         mNetworkController = Dependency.get(NetworkController.class);
         mStatusBarComponent = SysUiServiceProvider.getComponent(getContext(), StatusBar.class);
-        mHexSettingsObserver.observe();
+        mHexSettingsObserver = new HexSettingsObserver(mHandler);
     }
 
     @Override

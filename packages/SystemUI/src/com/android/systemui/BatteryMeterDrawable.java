@@ -279,10 +279,8 @@ public class BatteryMeterDrawable extends Drawable implements
                 CMSettings.System.STATUS_BAR_BATTERY_STYLE, 0) == 2) {
             animateCircleBattery(level, pluggedIn, charging);
         } else if (CMSettings.System.getInt(mContext.getContentResolver(),
-                CMSettings.System.STATUS_BAR_PULSE_CHARGING_BATTERY, 0) == 1 ||
-                CMSettings.System.getInt(mContext.getContentResolver(),
                 CMSettings.System.STATUS_BAR_BATTERY_STYLE, 0) == 7) {
-            pulseBatteryIcon(level, pluggedIn, charging);
+            animateSolidBattery(level, pluggedIn, charging);
         }
 
         postInvalidate();
@@ -400,7 +398,7 @@ public class BatteryMeterDrawable extends Drawable implements
         }
     }
 
-    public void pulseBatteryIcon(int level, boolean pluggedIn, boolean charging) {
+    public void animateSolidBattery(int level, boolean pluggedIn, boolean charging) {
         if (charging) {
             if (mAnimator != null) mAnimator.cancel();
 

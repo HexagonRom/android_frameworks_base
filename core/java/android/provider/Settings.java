@@ -4222,10 +4222,6 @@ public final class Settings {
         public static final String QS_SMART_PULLDOWN = "qs_smart_pulldown";
 
         /**
-         * @hide
-         */
-
-        /**
          * Status bar carrier label
          * 0: Hide
          * 1: Display on keyguard status bar

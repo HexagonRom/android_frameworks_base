@@ -35,4 +35,5 @@
     <color name="pink_accent_color">#ff1b70</color>
     <color name="cyan_accent_color">#24b7d6</color>
     <color name="grey_accent_color">#ff5d5d5d</color>
+    <color name="primary_hex_default_settings">#ff03A9F4</color>
 </resources>

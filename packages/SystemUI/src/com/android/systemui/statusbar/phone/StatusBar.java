@@ -387,6 +387,9 @@ public class StatusBar extends SystemUI implements DemoMode,
      * This affects the status bar UI. */
     private static final boolean FREEFORM_WINDOW_MANAGEMENT;
 
+    private static final String STATUS_BAR_BATTERY_SAVER_COLOR =
+            Settings.Secure.STATUS_BAR_BATTERY_SAVER_COLOR;
+
     /**
      * How long to wait before auto-dismissing a notification that was kept for remote input, and
      * has now sent a remote input. We auto-dismiss, because the app may not see a reason to cancel
@@ -538,6 +541,8 @@ public class StatusBar extends SystemUI implements DemoMode,
         : null;
 
     private ScreenPinningRequest mScreenPinningRequest;
+
+    private int mBatterySaverColor;
 
     private final MetricsLogger mMetricsLogger = Dependency.get(MetricsLogger.class);
 
@@ -3594,6 +3599,9 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (powerSave && getBarState() == StatusBarState.SHADE) {
             mode = MODE_WARNING;
         }
+        if (mode == MODE_WARNING) {
+            transitions.setBatterySaverColor(mBatterySaverColor);
+        }
         transitions.transitionTo(mode, anim);
     }
 
@@ -6291,6 +6299,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SYSTEM_UI_THEME),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.STATUS_BAR_BATTERY_SAVER_COLOR),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -6337,6 +6348,12 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.SYSTEM_UI_THEME))) {
                 updateTheme();
+            } else if (uri.equals(Settings.Secure.getUriFor(
+                    Settings.Secure.STATUS_BAR_BATTERY_SAVER_COLOR))) {
+                mBatterySaverColor = Settings.Secure.getIntForUser(
+                        mContext.getContentResolver(),
+                        Settings.Secure.STATUS_BAR_BATTERY_SAVER_COLOR,
+                        0xfff4511e, UserHandle.USER_CURRENT);
             }
         }
 
@@ -6351,6 +6368,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             updateQsPanelResources();
             setLockscreenMaxNotifications();
             updateFPQuickPulldown();
+            updateBatterySaverColor();
 
             // Update slim recents
             updateRecents();
@@ -6396,6 +6414,11 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (mQSPanel != null) {
             mQSPanel.updateResources();
         }
+    }
+
+    private void updateBatterySaverColor() {
+        mBatterySaverColor = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.STATUS_BAR_BATTERY_SAVER_COLOR, 0xfff4511e, UserHandle.USER_CURRENT);
     }
 
     protected final ContentObserver mNavbarObserver = new ContentObserver(mHandler) {

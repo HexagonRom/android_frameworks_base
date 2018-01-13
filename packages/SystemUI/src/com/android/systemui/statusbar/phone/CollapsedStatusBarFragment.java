@@ -70,6 +70,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private boolean mShowLogo;
     private View mHexLogoRight;
     private View mCustomCarrierLabel;
+    private View mBatteryBar;
     private int mShowCarrierLabel;
     private int mShowLogo;
     private final Handler mHandler = new Handler();
@@ -135,6 +136,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mHexLogo = mStatusBar.findViewById(R.id.status_bar_logo);
         mHexLogoRight = mStatusBar.findViewById(R.id.status_bar_logo_right);
         mCustomCarrierLabel = mStatusBar.findViewById(R.id.statusbar_carrier_text);
+        mBatteryBar = mStatusBar.findViewById(R.id.battery_bar);
+        mHexSettingsObserver.observe();
         updateSettings(false);
         // Default to showing until we know otherwise.
         showSystemIconArea(false);
@@ -240,6 +243,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (mShowLogo == 2) {
             animateHide(mHexLogoRight, animate, false);
         }
+        animateHide(mBatteryBar, animate, true);
     }
 
     public void showSystemIconArea(boolean animate) {
@@ -247,6 +251,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (mShowLogo == 2) {
             animateShow(mHexLogoRight, animate);
         }
+        animateShow(mBatteryBar, animate);
     }
 
     public void hideNotificationIconArea(boolean animate) {
@@ -254,6 +259,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (mShowLogo == 1) {
             animateHide(mHexLogo, animate, false);
         }
+        animateHide(mBatteryBar, animate, true);
     }
 
     public void showNotificationIconArea(boolean animate) {
@@ -261,6 +267,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (mShowLogo == 1) {
             animateShow(mHexLogo, animate);
         }
+        animateShow(mBatteryBar, animate);
     }
 
     public void hideCarrierName(boolean animate) {

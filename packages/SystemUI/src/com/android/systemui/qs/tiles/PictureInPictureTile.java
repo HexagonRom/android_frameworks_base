@@ -47,13 +47,13 @@ public class PictureInPictureTile extends QSTileImpl<BooleanState> {
     @Override
     public void handleClick() {
         mHost.collapsePanels();
-        ActivityInfo ai = AicpUtils.getRunningActivityInfo(mContext);
+        ActivityInfo ai = HexUtils.getRunningActivityInfo(mContext);
         if (ai != null && !ai.supportsPictureInPicture()) {
             Toast.makeText(mContext, mContext.getString(
                     R.string.quick_settings_pip_tile_app_na), Toast.LENGTH_LONG).show();
             return;
         }
-        AicpUtils.sendKeycode(171);
+        HexUtils.sendKeycode(171);
     }
 
     @Override
